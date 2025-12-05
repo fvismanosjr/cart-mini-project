@@ -1,5 +1,7 @@
 package com.example.cartapi.entity
 
+import com.example.cartapi.dto.CartResponse
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -10,6 +12,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import org.hibernate.engine.internal.Cascade
 import java.math.BigDecimal
 
 @Entity
@@ -23,9 +26,17 @@ class Cart (
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     var user: User,
 
-    @Column(name = "total_amount", precision = 10, scale = 2)
-    var totalAmount: BigDecimal,
-
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "cart",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL]
+    )
     var cartItems: MutableList<CartItem> = mutableListOf()
-)
+) {
+    fun toResponse(): CartResponse {
+        return CartResponse(
+            this.id,
+            items = this.cartItems.map { it.toResponse() }
+        )
+    }
+}

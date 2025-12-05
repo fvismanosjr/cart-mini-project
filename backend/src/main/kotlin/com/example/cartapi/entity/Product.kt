@@ -1,5 +1,6 @@
 package com.example.cartapi.entity
 
+import com.example.cartapi.dto.ProductResponse
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -26,4 +27,13 @@ class Product (
 
     @Column(name = "stock")
     var stock: Int = 0,
-)
+) {
+    fun toResponse(): ProductResponse {
+        return ProductResponse(
+            this.id,
+            this.name,
+            this.description,
+            this.price
+        )
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.cartapi.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -33,6 +34,10 @@ class Order (
     @Column(name = "created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "order",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL]
+    )
     var orderItems: MutableList<OrderItem> = mutableListOf()
 )

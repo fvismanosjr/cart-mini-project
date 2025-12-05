@@ -3,7 +3,9 @@ package com.example.cartapi.service
 import com.example.cartapi.dto.LoginRequest
 import com.example.cartapi.dto.LoginResponse
 import com.example.cartapi.dto.RegisterRequest
+import com.example.cartapi.entity.Cart
 import com.example.cartapi.entity.User
+import com.example.cartapi.repository.CartRepository
 import com.example.cartapi.repository.UserRepository
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.BadCredentialsException
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class AuthService(
     private val userRepository: UserRepository,
+    private val cartRepository: CartRepository,
     private val jwtService: JwtService
 ) {
     fun registerUser(request: RegisterRequest) : String {
@@ -25,6 +28,12 @@ class AuthService(
                 username = request.username.lowercase(),
                 password = BCryptPasswordEncoder().encode(request.password),
                 role = "ROLE_USER"
+            )
+        )
+
+        val cart = cartRepository.save(
+            Cart(
+                user = user
             )
         )
 

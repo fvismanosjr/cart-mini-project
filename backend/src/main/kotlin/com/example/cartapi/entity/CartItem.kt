@@ -1,5 +1,6 @@
 package com.example.cartapi.entity
 
+import com.example.cartapi.dto.CartItemResponse
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -31,4 +32,12 @@ class CartItem (
         columnDefinition = "INT CHECK (quantity > 0)"
     )
     var quantity: Int
-)
+) {
+    fun toResponse(): CartItemResponse {
+        return CartItemResponse(
+            this.id,
+            product = this.product.toResponse(),
+            this.quantity
+        )
+    }
+}
