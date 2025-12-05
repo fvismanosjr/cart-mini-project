@@ -43,7 +43,7 @@ const loginUser = async () => {
         user.save(payload);
 
         router.push({
-            name: "board",
+            name: "shop",
         });
     }
 }
@@ -95,9 +95,5 @@ const loginUser = async () => {
                 </form>
             </CardContent>
         </Card>
-        <FieldDescription class="px-6 text-center">
-            By clicking continue, you agree to our <a href="#">Terms of Service</a>
-            and <a href="#">Privacy Policy</a>.
-        </FieldDescription>
     </div>
 </template>

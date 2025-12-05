@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '@/pages/auth/LoginPage.vue'
-import RegisterPage from '@/pages/auth/RegisterPage.vue'
 import { checkIfAuthenticated } from '@/services/auth'
+import LoginForm from '@/components/LoginForm.vue'
+import RegisterForm from '@/components/RegisterForm.vue'
 import AppLayout from '@/pages/AppLayout.vue'
+import AuthLayout from '@/pages/AuthLayout.vue'
+import ShopPage from '@/pages/ShopPage.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,25 +12,27 @@ const router = createRouter({
         {
             path: "/login",
             name: "login",
-            component: LoginPage,
-            meta : {
+            component: LoginForm,
+            meta: {
                 guestOnly: true,
+                layout: AuthLayout
             }
         },
         {
             path: "/register",
             name: "register",
-            component: RegisterPage,
-            meta : {
+            component: RegisterForm,
+            meta: {
                 guestOnly: true,
+                layout: AuthLayout
             }
         },
         {
             path: "/shop",
             name: "shop",
-            component: AppLayout,
-            meta : {
-                guestOnly: true,
+            component: ShopPage,
+            meta: {
+                layout: AppLayout
             }
         }
     ],

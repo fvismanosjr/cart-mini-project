@@ -1,10 +1,5 @@
-<script lang="ts">
-export const description = "A login page with a muted background color."
-</script>
-
 <script setup lang="ts">
-import { ShoppingCart } from "lucide-vue-next"
-import LoginForm from "@/components/LoginForm.vue";
+import { Sparkles } from "lucide-vue-next"
 </script>
 
 <template>
@@ -12,10 +7,10 @@ import LoginForm from "@/components/LoginForm.vue";
         <div class="flex w-full max-w-sm flex-col gap-6">
             <a href="#" class="flex items-center gap-2 self-center font-medium">
                 <div class="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md">
-                    <ShoppingCart class="size-5" />
+                    <Sparkles class="size-5" />
                 </div>
             </a>
-            <LoginForm />
+            <slot></slot>
         </div>
     </div>
 </template>
