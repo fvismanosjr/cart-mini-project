@@ -1,0 +1,10 @@
+INSERT INTO products (name, description, price, stock) VALUES ('Herschel Bag', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 19.99, 10);
+INSERT INTO products (name, description, price, stock) VALUES ('Hoodie Jacket', 'Phasellus ultrices interdum dolor in faucibus.', 29.99, 20);
+INSERT INTO products (name, description, price, stock) VALUES ('Uniqlo TShirt', 'Fusce blandit rutrum orci eu sollicitudin.', 39.99, 30);
+INSERT INTO products (name, description, price, stock) VALUES ('Timex Watch', 'Nulla condimentum finibus finibus.', 49.99, 40);
+INSERT INTO products (name, description, price, stock) VALUES ('Iphone 17', 'Nulla condimentum finibus finibus.', 59.99, 50);
+INSERT INTO products (name, description, price, stock) VALUES ('Macbook Pro', 'Morbi ac nulla commodo libero tincidunt tempus pellentesque eu leo.', 69.99, 60);
+INSERT INTO products (name, description, price, stock) VALUES ('Tesla', 'Duis quis turpis vitae augue sollicitudin blandit.', 79.99, 70);
+INSERT INTO products (name, description, price, stock) VALUES ('Play Station', 'Nam quis sodales dolor. ', 89.99, 80);
+INSERT INTO products (name, description, price, stock) VALUES ('House and Lot', 'Sed et quam felis. Mauris pretium egestas neque id tempus.', 99.99, 90);
+INSERT INTO products (name, description, price, stock) VALUES ('Whole Country', 'Phasellus blandit accumsan est..', 109.99, 0);
