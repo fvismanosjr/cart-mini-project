@@ -5,6 +5,8 @@ import RegisterForm from '@/components/RegisterForm.vue'
 import AppLayout from '@/pages/AppLayout.vue'
 import AuthLayout from '@/pages/AuthLayout.vue'
 import ShopPage from '@/pages/ShopPage.vue'
+import OrderPage from '@/pages/OrderPage.vue'
+import BagPage from '@/pages/BagPage.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +33,22 @@ const router = createRouter({
             path: "/shop",
             name: "shop",
             component: ShopPage,
+            meta: {
+                layout: AppLayout
+            }
+        },
+        {
+            path: "/bag",
+            name: "bag",
+            component: BagPage,
+            meta: {
+                layout: AppLayout
+            }
+        },
+        {
+            path: "/order",
+            name: "order",
+            component: OrderPage,
             meta: {
                 layout: AppLayout
             }

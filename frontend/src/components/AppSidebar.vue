@@ -35,19 +35,19 @@ const data = {
     navMenu: [
         {
             title: "Shop",
-            url: "#",
+            name: "shop",
             icon: Store,
             isActive: true,
         },
         {
             title: "Bag",
-            url: "#",
+            name: "bag",
             icon: ShoppingBag,
             isActive: false,
         },
         {
             title: "Order",
-            url: "#",
+            name: "order",
             icon: ClipboardClock,
             isActive: false,
         },
@@ -76,7 +76,7 @@ const data = {
         <SidebarContent class="p-2">
             <SidebarMenu>
                 <SidebarMenuItem v-for="menu in data.navMenu" :key="menu.title">
-                    <SidebarMenuButton :tooltip="menu.title">
+                    <SidebarMenuButton :tooltip="menu.title" @click.prevent="$router.push({ name: menu.name })">
                         <component :is="menu.icon" v-if="menu.icon" />
                         <span>{{ menu.title }}</span>
                     </SidebarMenuButton>
