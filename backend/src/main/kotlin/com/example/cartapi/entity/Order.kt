@@ -1,5 +1,6 @@
 package com.example.cartapi.entity
 
+import com.example.cartapi.dto.OrderResponse
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -40,4 +41,14 @@ class Order (
         cascade = [CascadeType.ALL]
     )
     var orderItems: MutableList<OrderItem> = mutableListOf()
-)
+) {
+    fun toResponse(): OrderResponse {
+        return OrderResponse(
+            this.id,
+            this.orderItems.map {
+                it.toResponse()
+            },
+            this.createdAt
+        )
+    }
+}

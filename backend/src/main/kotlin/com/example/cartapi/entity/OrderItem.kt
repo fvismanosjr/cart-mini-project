@@ -1,5 +1,7 @@
 package com.example.cartapi.entity
 
+import com.example.cartapi.dto.OrderItemRequest
+import com.example.cartapi.dto.OrderItemResponse
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -35,4 +37,13 @@ class OrderItem (
 
     @Column(name = "purchase_price", precision = 10, scale = 2)
     var purchasePrice: BigDecimal,
-)
+) {
+    fun toResponse(): OrderItemResponse {
+        return OrderItemResponse(
+            this.id,
+            this.product.toResponse(),
+            quantity = this.quantity,
+            price = this.purchasePrice
+        )
+    }
+}

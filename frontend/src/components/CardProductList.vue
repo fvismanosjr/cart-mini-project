@@ -10,9 +10,9 @@ import {
 import { ShoppingBag } from "lucide-vue-next"
 import { Badge } from '@/components/ui/badge'
 import { Button } from "@/components/ui/button"
-import { getProducts } from '@/services/product'
+import { addToBag, getProducts } from '@/services/product'
+import type { ProductType, ItemType } from '@/lib/types'
 import { ref } from 'vue'
-import type { ProductType } from '@/lib/types'
 
 const products = ref<ProductType[]>([]);
 
@@ -20,6 +20,16 @@ getProducts().then((result) => {
     products.value = result;
 })
 
+const addToBagEvent = (productId: number) => {
+    const item = <ItemType>{
+        productId: productId,
+        quantity: 1
+    }
+
+    addToBag(item).then((response) => {
+        console.log(response);
+    })
+}
 </script>
 
 <template>
@@ -39,7 +49,7 @@ getProducts().then((result) => {
                     </div>
                 </CardHeader>
                 <CardFooter v-if="product.stock" class="flex flex-wrap gap-2 mt-auto">
-                    <Button variant="outline" size="default">
+                    <Button variant="outline" size="default" @click.prevent="addToBagEvent(product.id)">
                         <ShoppingBag />
                         Add to Bag
                     </Button>

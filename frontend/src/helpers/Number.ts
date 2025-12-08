@@ -14,3 +14,10 @@ export const formatNumberToPercentage = (num: number) => {
         maximumFractionDigits: 2
     }).format(num);
 }
+
+export const formatNumberToUsdCurrency = (num: number) => {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(num)
+}

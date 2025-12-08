@@ -1,8 +1,8 @@
 package com.example.cartapi.service
 
 import com.example.cartapi.dto.LoginRequest
-import com.example.cartapi.dto.LoginResponse
 import com.example.cartapi.dto.RegisterRequest
+import com.example.cartapi.dto.UserResponse
 import com.example.cartapi.entity.Cart
 import com.example.cartapi.entity.User
 import com.example.cartapi.repository.CartRepository
@@ -18,7 +18,7 @@ class AuthService(
     private val cartRepository: CartRepository,
     private val jwtService: JwtService
 ) {
-    fun registerUser(request: RegisterRequest) : String {
+    fun registerUser(request: RegisterRequest): String {
         userRepository
             .findByUsername(request.username.lowercase())
             ?.let { throw Exception("user already registered") }
@@ -31,7 +31,7 @@ class AuthService(
             )
         )
 
-        val cart = cartRepository.save(
+        cartRepository.save(
             Cart(
                 user = user
             )
@@ -40,7 +40,7 @@ class AuthService(
         return "User registered successfully"
     }
 
-    fun authenticateUser(request: LoginRequest, response: HttpServletResponse) : LoginResponse {
+    fun authenticateUser(request: LoginRequest, response: HttpServletResponse): UserResponse {
         val user = request
             .let { userRepository.findByUsername(it.username) ?: throw Exception("user not found") }
             .takeIf { BCryptPasswordEncoder().matches(request.password, it.password) }
@@ -51,11 +51,7 @@ class AuthService(
             token = jwtService.generateToken(user.username)
         ))
 
-        return LoginResponse(
-            id = user.id,
-            username = user.username,
-            role = user.role,
-        )
+        return user.toResponse()
     }
 
     fun unAuthenticateUser(response: HttpServletResponse)

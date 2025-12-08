@@ -38,6 +38,7 @@ const loginUser = async () => {
             id: result.id,
             username: result.username,
             role: result.role,
+            cartId: result.cartId,
         }
 
         user.save(payload);

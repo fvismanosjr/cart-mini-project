@@ -27,13 +27,9 @@ data class LoginRequest(
     val password: String,
 )
 
-data class LoginResponse(
-    val id: Long,
-    val username: String,
-    val role: String,
-)
-
 data class UserResponse(
     val id: Long,
     val username: String,
+    val role: String,
+    val cartId: Long?
 )

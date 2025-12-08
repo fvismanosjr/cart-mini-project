@@ -1,7 +1,6 @@
 package com.example.cartapi.controller
 
 import com.example.cartapi.dto.LoginRequest
-import com.example.cartapi.dto.LoginResponse
 import com.example.cartapi.dto.RegisterRequest
 import com.example.cartapi.service.AuthService
 import jakarta.servlet.http.HttpServletResponse
@@ -30,7 +29,7 @@ class AuthController(
     fun login(
         @RequestBody request: LoginRequest,
         response: HttpServletResponse
-    ): LoginResponse = authService.authenticateUser(request, response)
+    ) = authService.authenticateUser(request, response)
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)

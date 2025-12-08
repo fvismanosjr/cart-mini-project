@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
         id: 0,
         username: "",
         role: "",
+        cartId: 0,
     });
 
     const isOwner = computed(() => user.value.role == "ROLE_OWNER");
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('user', () => {
         user.value.id = 0;
         user.value.username = "";
         user.value.role = "";
+        user.value.cartId = 0;
     }
 
     return {
