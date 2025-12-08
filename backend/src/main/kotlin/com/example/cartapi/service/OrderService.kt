@@ -1,5 +1,6 @@
 package com.example.cartapi.service
 
+import com.example.cartapi.dto.CancelOrderRequest
 import com.example.cartapi.dto.OrderRequest
 import com.example.cartapi.dto.OrderResponse
 import com.example.cartapi.entity.Order
@@ -17,7 +18,10 @@ class OrderService(
     private val cartRepository: CartRepository,
     private val productRepository: ProductRepository,
 ) {
-    fun save(request: OrderRequest): OrderResponse {
+    fun save(
+        userId: Long,
+        request: OrderRequest
+    ): OrderResponse {
         var total = BigDecimal(0.00);
         val cart = cartRepository.findById(request.cartId).orElseThrow()
 
@@ -57,5 +61,24 @@ class OrderService(
         cartRepository.save(cart)
 
         return order.toResponse()
+    }
+
+    fun canBeCanceled(orderDate: LocalDateTime): Boolean {
+        val now = LocalDateTime.now()
+        return !now.isBefore(orderDate) && !now.isAfter(orderDate.plusDays(7))
+    }
+
+    fun cancel(
+        orderId: Long,
+        request: CancelOrderRequest
+    ): OrderResponse {
+        return orderRepository.findById(orderId)
+            .orElseThrow()
+            .apply {
+                check(canBeCanceled(createdAt)) { "Order can no longer be cancelled." }
+                status = request.status
+            }
+            .let(orderRepository::save)
+            .toResponse()
     }
 }

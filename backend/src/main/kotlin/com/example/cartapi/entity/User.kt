@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 
@@ -32,14 +33,22 @@ class User(
         cascade = [CascadeType.ALL],
         fetch = FetchType.LAZY
     )
-    var cart: Cart? = null
+    var cart: Cart? = null,
+
+    @OneToMany(
+        mappedBy = "user",
+        cascade = [CascadeType.ALL],
+        fetch = FetchType.LAZY
+    )
+    var orders: MutableList<Order> = mutableListOf()
 ) {
     fun toResponse(): UserResponse {
         return UserResponse(
             this.id,
             this.username,
             this.role,
-            this.cart?.id
+            this.cart?.toResponse(),
+            this.orders.map { it.toResponse() }
         )
     }
 }

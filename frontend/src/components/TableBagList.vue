@@ -33,23 +33,24 @@ import {
     X,
 } from 'lucide-vue-next'
 
-import { getCart } from '@/services/product'
-import { saveOrder } from '@/services/order'
+import { saveOrder } from '@/services/user'
 import { formatNumberToUsdCurrency } from '@/helpers/Number'
-import type { CartType, CartItemType } from '@/lib/types'
+import type { CartItemType } from '@/lib/types'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { findUser, removeFromBag } from '@/services/user'
+import { useUserStore } from '@/stores/user'
 
+const emit = defineEmits<{
+    (e: "update:list", value: boolean): void,
+}>();
+
+const user = useUserStore();
 const items = ref<CartItemType[]>([]);
-const cartId = ref(0);
 const router = useRouter();
 
-getCart().then((response: CartType) => {
-    cartId.value = response.id;
-    items.value = response.items.map(item => ({
-        ...item,
-        checked: true,
-    }))
+findUser(user.user.id).then((response) => {
+    items.value = response.cart.items;
 })
 
 const totalAmount = computed(() => {
@@ -62,9 +63,14 @@ const totalAmount = computed(() => {
     return amount;
 })
 
-const saveSelected = async () => {
+const removeFromBagEvent = async (cartItemId: number) => {
+    await removeFromBag(cartItemId);
+    emit("update:list", true);
+}
+
+const checkout = async () => {
     await saveOrder({
-        cartId: cartId.value,
+        cartId: user.user.cartId,
         items: items.value.map((item) => {
             return {
                 productId: item.product.id,
@@ -113,7 +119,7 @@ const saveSelected = async () => {
                         {{ formatNumberToUsdCurrency(item.quantity * item.product.price) }}
                     </TableCell>
                     <TableCell class="text-right px-5">
-                        <Button variant="secondary" size="icon-sm">
+                        <Button variant="secondary" size="icon-sm" @click.prevent="removeFromBagEvent(item.id)">
                             <X />
                         </Button>
                     </TableCell>
@@ -121,7 +127,7 @@ const saveSelected = async () => {
             </TableBody>
         </Table>
         <div class="flex py-4 justify-between align-middle">
-            <Button type="button" @click.prevent="saveSelected">Proceed to Checkout</Button>
+            <Button type="button" @click.prevent="checkout">Proceed to Checkout</Button>
             <p class="px-5">
                 Total Amount: <span class="text-2xl font-bold">{{ formatNumberToUsdCurrency(totalAmount) }}</span>
             </p>

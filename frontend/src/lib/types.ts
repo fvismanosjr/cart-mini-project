@@ -40,3 +40,11 @@ export interface OrderRequestType {
     cartId: number,
     items: OrderItemType[],
 }
+
+export interface OrderResponseType {
+    id: number,
+    items: [],
+    status: string,
+    totalAmount: number,
+    createdAt: string,
+}

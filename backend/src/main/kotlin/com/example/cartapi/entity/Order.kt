@@ -48,6 +48,8 @@ class Order (
             this.orderItems.map {
                 it.toResponse()
             },
+            this.status,
+            this.totalAmount,
             this.createdAt
         )
     }

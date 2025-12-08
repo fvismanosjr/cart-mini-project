@@ -20,10 +20,30 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ClipboardClock, Store, X } from 'lucide-vue-next'
+import { formatToDateTime, canBeCanceled } from '@/helpers/Number'
 import { ref } from 'vue'
+import { cancelOrder, findUser } from '@/services/user'
+import { useUserStore } from '@/stores/user'
+import type { OrderResponseType } from '@/lib/types'
 
-const orders = ref([1,2,3,4,5]);
-// const orders = ref([]);
+const user = useUserStore();
+const orders = ref<OrderResponseType[]>([]);
+
+const emit = defineEmits<{
+    (e: "update:list", value: boolean): void,
+}>();
+
+findUser(user.user.id).then((response) => {
+    orders.value = response.orders;
+})
+
+const cancelOrderEvent = (orderId: number) => {
+    cancelOrder(orderId, {
+        status: "canceled"
+    }).then(() => {
+        emit("update:list", true);
+    })
+}
 </script>
 
 <template>
@@ -40,18 +60,21 @@ const orders = ref([1,2,3,4,5]);
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow v-for="order in orders" :key="order">
+                <TableRow v-for="order in orders" :key="order.id">
+                    <TableCell>{{ order.id }}</TableCell>
+                    <TableCell>{{ order.items.length }}</TableCell>
+                    <TableCell>${{ order.totalAmount }}</TableCell>
+                    <TableHead>{{ formatToDateTime(order.createdAt) }}</TableHead>
                     <TableCell>
-                        1
-                    </TableCell>
-                    <TableCell>5</TableCell>
-                    <TableCell>$19.99</TableCell>
-                    <TableHead>December 05, 2025</TableHead>
-                    <TableCell>
-                        <Badge variant="default">Pending</Badge>
+                        <Badge variant="default">{{ order.status }}</Badge>
                     </TableCell>
                     <TableCell class="text-right">
-                        <Button variant="secondary" size="icon-sm">
+                        <Button
+                            v-if="order.status.toLowerCase() != 'canceled' && canBeCanceled(order.createdAt)"
+                            variant="secondary"
+                            size="icon-sm"
+                            @click.prevent="cancelOrderEvent(order.id)"
+                        >
                             <X />
                         </Button>
                     </TableCell>

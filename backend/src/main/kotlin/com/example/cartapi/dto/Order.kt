@@ -17,6 +17,8 @@ data class OrderRequest(
 data class OrderResponse(
     val id: Long,
     val items: List<OrderItemResponse>,
+    val status: String,
+    val totalAmount: BigDecimal,
     val createdAt: LocalDateTime,
 )
 
@@ -25,4 +27,8 @@ data class OrderItemResponse(
     val product: ProductResponse,
     val quantity: Int,
     val price: BigDecimal,
+)
+
+data class CancelOrderRequest(
+    val status: String,
 )

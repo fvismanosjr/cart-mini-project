@@ -21,3 +21,23 @@ export const formatNumberToUsdCurrency = (num: number) => {
         currency: "USD",
     }).format(num)
 }
+
+export const formatToDateTime = (num: string) => {
+    return new Intl.DateTimeFormat("en-US", {
+        dateStyle: "medium",
+        timeStyle: "short"
+    }).format(new Date(num));
+}
+
+export const canBeCanceled = (purchasedDate: string) => {
+    const orderDate = new Date(purchasedDate);
+    const today = new Date();
+
+    // end date = order date + 7 days
+    const cancelLimit = new Date(orderDate);
+    cancelLimit.setDate(cancelLimit.getDate() + 7);
+
+    // Check range inclusive
+    return today >= orderDate && today <= cancelLimit;
+}
+

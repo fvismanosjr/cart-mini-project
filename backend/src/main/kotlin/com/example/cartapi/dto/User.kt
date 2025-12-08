@@ -31,5 +31,6 @@ data class UserResponse(
     val id: Long,
     val username: String,
     val role: String,
-    val cartId: Long?
+    val cart: CartResponse?,
+    val orders: List<OrderResponse>
 )

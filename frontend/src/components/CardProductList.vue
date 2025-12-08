@@ -10,24 +10,37 @@ import {
 import { ShoppingBag } from "lucide-vue-next"
 import { Badge } from '@/components/ui/badge'
 import { Button } from "@/components/ui/button"
-import { addToBag, getProducts } from '@/services/product'
+import { getProducts } from '@/services/product'
+import { addToBag } from '@/services/user'
 import type { ProductType, ItemType } from '@/lib/types'
 import { ref } from 'vue'
 
+const emit = defineEmits<{
+    (e: "update:list", value: boolean): void,
+}>();
+
 const products = ref<ProductType[]>([]);
 
-getProducts().then((result) => {
-    products.value = result;
+getProducts().then((result: ProductType[]) => {
+    products.value = result.map(product => ({
+        ...product,
+        isInBag: false
+    }));
 })
 
-const addToBagEvent = (productId: number) => {
+const addToBagEvent = async (productId: number) => {
     const item = <ItemType>{
         productId: productId,
         quantity: 1
     }
 
-    addToBag(item).then((response) => {
-        console.log(response);
+    const product = products.value.find((product) => {
+        return product.id == productId
+    })
+
+    await addToBag(item).then(() => {
+        // emit("update:list", true);
+        product.isInBag = true;
     })
 }
 </script>
@@ -49,14 +62,19 @@ const addToBagEvent = (productId: number) => {
                     </div>
                 </CardHeader>
                 <CardFooter v-if="product.stock" class="flex flex-wrap gap-2 mt-auto">
-                    <Button variant="outline" size="default" @click.prevent="addToBagEvent(product.id)">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        @click.prevent="addToBagEvent(product.id)"
+                        v-if="!product.isInBag"
+                    >
                         <ShoppingBag />
                         Add to Bag
                     </Button>
-                    <!-- <Button variant="destructive" size="sm">
+                    <Button v-else variant="secondary" size="sm" @click.prevent="$router.push({ name: 'bag' })">
                         <ShoppingBag />
-                        Remove from Bag
-                    </Button> -->
+                        Go to Bag
+                    </Button>
                 </CardFooter>
             </Card>
         </template>
