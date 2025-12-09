@@ -10,6 +10,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import jakarta.persistence.OrderBy
 import jakarta.persistence.Table
 
 @Entity
@@ -29,6 +30,7 @@ class Cart (
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
+    @OrderBy("id ASC")
     var cartItems: MutableList<CartItem> = mutableListOf()
 ) {
     fun toResponse(): CartResponse {

@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import jakarta.persistence.OrderBy
 import jakarta.persistence.Table
 
 @Entity
@@ -40,6 +41,7 @@ class User(
         cascade = [CascadeType.ALL],
         fetch = FetchType.LAZY
     )
+    @OrderBy("id ASC")
     var orders: MutableList<Order> = mutableListOf()
 ) {
     fun toResponse(): UserResponse {
