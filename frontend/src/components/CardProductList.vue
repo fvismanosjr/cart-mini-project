@@ -54,7 +54,7 @@ const addToBagEvent = async (productId: number) => {
 </script>
 
 <template>
-    <div class="grid auto-rows-min gap-4 md:grid-cols-4">
+    <div class="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-4">
         <template v-for="product in products" :key="product.id">
             <Card class="pt-0">
                 <div class="bg-muted/50 rounded-md h-[200px] aspect-square w-full"></div>
