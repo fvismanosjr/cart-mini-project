@@ -38,7 +38,7 @@ import { formatNumberToUsdCurrency } from '@/helpers/Number'
 import type { CartItemType } from '@/lib/types'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { findUser, removeFromBag, updateBag } from '@/services/user'
+import { showAllBagItems, removeFromBag, updateBag } from '@/services/user'
 import { useUserStore } from '@/stores/user'
 import { useDebounceFn } from '@vueuse/core'
 
@@ -50,8 +50,8 @@ const user = useUserStore();
 const items = ref<CartItemType[]>([]);
 const router = useRouter();
 
-findUser(user.user.id).then((response) => {
-    items.value = response.cart.items;
+showAllBagItems().then((response) => {
+    items.value = response.content;
 })
 
 const totalAmount = computed(() => {

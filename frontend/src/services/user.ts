@@ -10,6 +10,17 @@ export const findUser = async (userId: number) => {
     });
 }
 
+export const showAllBagItems = async () => {
+    const user = useUserStore();
+
+    return await fetch(`${USER_API_URL}/${user.user.id}/carts/${user.user.cartId}/items`, {
+        method: "GET",
+        credentials: "include"
+    }).then(async (response) => {
+        return await response.json();
+    })
+}
+
 export const addToBag = async (item: object) => {
     const user = useUserStore();
 

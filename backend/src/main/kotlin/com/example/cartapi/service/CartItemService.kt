@@ -7,6 +7,8 @@ import com.example.cartapi.entity.CartItem
 import com.example.cartapi.repository.CartItemRepository
 import com.example.cartapi.repository.CartRepository
 import com.example.cartapi.repository.ProductRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,6 +17,13 @@ class CartItemService(
     private val cartItemRepository: CartItemRepository,
     private val productRepository: ProductRepository,
 ) {
+    fun findAllByCartId(
+        cartId: Long,
+        pageable: Pageable?
+    ): Page<CartItemResponse> = cartItemRepository
+                                .findByCartId(cartId, pageable ?: Pageable.unpaged())
+                                .map { it.toResponse() }
+
     fun save(
         cartId: Long,
         request: CartItemRequest
