@@ -10,6 +10,11 @@ data class CartItemRequest(
     val quantity: Int,
 )
 
+data class UpdateCartItemRequest(
+    @field:Min(1)
+    val quantity: Int
+)
+
 data class CartResponse(
     val id: Long,
     val items: List<CartItemResponse>

@@ -11,6 +11,7 @@ export interface ProductType {
     description: string,
     price: number,
     stock: number,
+    isInBag: boolean,
 }
 
 export interface ItemType {

@@ -3,9 +3,11 @@ package com.example.cartapi.controller
 import com.example.cartapi.dto.CancelOrderRequest
 import com.example.cartapi.dto.CartItemRequest
 import com.example.cartapi.dto.OrderRequest
+import com.example.cartapi.dto.UpdateCartItemRequest
 import com.example.cartapi.service.CartItemService
 import com.example.cartapi.service.OrderService
 import com.example.cartapi.service.UserService
+import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -33,26 +35,34 @@ class UserController(
     fun addToCart(
         @PathVariable userId: Long,
         @PathVariable cartId: Long,
-        @RequestBody request: CartItemRequest
+        @Valid @RequestBody request: CartItemRequest
     ) = cartItemService.save(cartId, request)
 
-    @DeleteMapping("/{userId}/carts/{cartId}/items/{itemId}")
+    @PatchMapping("/{userId}/carts/{cartId}/items/{cartItemId}")
+    fun updateItemFromCart(
+        @PathVariable userId: Long,
+        @PathVariable cartId: Long,
+        @PathVariable cartItemId: Long,
+        @Valid @RequestBody request: UpdateCartItemRequest
+    ) = cartItemService.update(cartId, cartItemId, request)
+
+    @DeleteMapping("/{userId}/carts/{cartId}/items/{cartItemId}")
     fun removeFromCart(
         @PathVariable userId: Long,
         @PathVariable cartId: Long,
-        @PathVariable itemId: Long,
-    ) = cartItemService.delete(cartId, itemId)
+        @PathVariable cartItemId: Long,
+    ) = cartItemService.delete(cartId, cartItemId)
 
     @PostMapping("/{userId}/orders")
     fun addToOrder(
         @PathVariable userId: Long,
-        @RequestBody request: OrderRequest
+        @Valid @RequestBody request: OrderRequest
     ) = orderService.save(userId, request)
 
     @PatchMapping("/{userId}/orders/{orderId}")
     fun cancelOrder(
         @PathVariable userId: Long,
         @PathVariable orderId: Long,
-        @RequestBody request: CancelOrderRequest
+        @Valid @RequestBody request: CancelOrderRequest
     ) = orderService.cancel(orderId, request)
 }

@@ -25,6 +25,21 @@ export const addToBag = async (item: object) => {
     })
 }
 
+export const updateBag = async (item: { id: number, quantity: number }) => {
+    const user = useUserStore();
+
+    return await fetch(`${USER_API_URL}/${user.user.id}/carts/${user.user.cartId}/items/${item.id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(item),
+        credentials: "include"
+    }).then(async (response) => {
+        return await response.json();
+    })
+}
+
 export const removeFromBag = async (cartItemId: number) => {
     const user = useUserStore();
 

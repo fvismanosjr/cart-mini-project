@@ -11,36 +11,44 @@ import { ShoppingBag } from "lucide-vue-next"
 import { Badge } from '@/components/ui/badge'
 import { Button } from "@/components/ui/button"
 import { getProducts } from '@/services/product'
-import { addToBag } from '@/services/user'
-import type { ProductType, ItemType } from '@/lib/types'
+import { addToBag, findUser } from '@/services/user'
+import type { ProductType, CartItemType } from '@/lib/types'
+import { useUserStore } from '@/stores/user'
 import { ref } from 'vue'
 
-const emit = defineEmits<{
-    (e: "update:list", value: boolean): void,
-}>();
-
+const user = useUserStore();
 const products = ref<ProductType[]>([]);
+const items = ref<CartItemType[]>([]);
 
-getProducts().then((result: ProductType[]) => {
-    products.value = result.map(product => ({
-        ...product,
-        isInBag: false
-    }));
+findUser(user.user.id).then(async (response) => {
+    items.value = response.cart.items;
+
+    await getProducts().then((result: ProductType[]) => {
+        products.value = result.map(product => {
+            const isFound = items.value.find((item) => {
+                return item.product.id == product.id
+            })
+
+            return {
+                ...product,
+                isInBag: isFound ? true : false
+            }
+        });
+    })
 })
 
 const addToBagEvent = async (productId: number) => {
-    const item = <ItemType>{
+    await addToBag({
         productId: productId,
-        quantity: 1
-    }
+        quantity: 1,
+    }).then(() => {
+        const product = products.value.find((product) => {
+            return product.id == productId
+        })
 
-    const product = products.value.find((product) => {
-        return product.id == productId
-    })
-
-    await addToBag(item).then(() => {
-        // emit("update:list", true);
-        product.isInBag = true;
+        if (product) {
+            product.isInBag = true;
+        }
     })
 }
 </script>

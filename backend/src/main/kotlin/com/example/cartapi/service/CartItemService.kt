@@ -2,6 +2,7 @@ package com.example.cartapi.service
 
 import com.example.cartapi.dto.CartItemRequest
 import com.example.cartapi.dto.CartItemResponse
+import com.example.cartapi.dto.UpdateCartItemRequest
 import com.example.cartapi.entity.CartItem
 import com.example.cartapi.repository.CartItemRepository
 import com.example.cartapi.repository.CartRepository
@@ -39,18 +40,13 @@ class CartItemService(
     fun update(
         cartId: Long,
         cartItemId: Long,
-        request: CartItemRequest
+        request: UpdateCartItemRequest
     ): CartItemResponse {
         // check if cart exists
         cartRepository.findById(cartId).orElseThrow()
 
         // check if cart item exist
         val cartItem = cartItemRepository.findById(cartItemId).orElseThrow()
-
-        // find if product exists and stock is greater than 0
-        productRepository
-        .findByIdAndStockGreaterThan(request.productId)
-        ?: throw Exception("product unavailable")
 
         cartItem.quantity = request.quantity
         return cartItemRepository.save(cartItem).toResponse()

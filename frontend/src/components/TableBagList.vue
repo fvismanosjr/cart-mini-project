@@ -38,8 +38,9 @@ import { formatNumberToUsdCurrency } from '@/helpers/Number'
 import type { CartItemType } from '@/lib/types'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { findUser, removeFromBag } from '@/services/user'
+import { findUser, removeFromBag, updateBag } from '@/services/user'
 import { useUserStore } from '@/stores/user'
+import { useDebounceFn } from '@vueuse/core'
 
 const emit = defineEmits<{
     (e: "update:list", value: boolean): void,
@@ -67,6 +68,15 @@ const removeFromBagEvent = async (cartItemId: number) => {
     await removeFromBag(cartItemId);
     emit("update:list", true);
 }
+
+const updateBagEvent = async (item: CartItemType) => {
+    await updateBag({
+        id: item.id,
+        quantity: item.quantity
+    })
+}
+
+const debounceUpdate = useDebounceFn(updateBagEvent, 500);
 
 const checkout = async () => {
     await saveOrder({
@@ -112,7 +122,13 @@ const checkout = async () => {
                         </Item>
                     </TableCell>
                     <TableCell>
-                        <Input class="w-1/2 text-center border-0 outline-0 shadow-none" type="number" v-model.number="item.quantity" min="1" />
+                        <Input
+                            class="w-1/2 text-center border-0 outline-0 shadow-none"
+                            type="number"
+                            v-model.number="item.quantity"
+                            min="1"
+                            @input="debounceUpdate(item)"
+                        />
                     </TableCell>
                     <TableCell>{{ formatNumberToUsdCurrency(item.product.price) }}</TableCell>
                     <TableCell>
