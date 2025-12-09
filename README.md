@@ -8,7 +8,7 @@ This repository contains a small full-stack example that demonstrates product li
 
 - Frontend: Vue 3, Vite, TypeScript, pnpm (see `frontend/`)
 - Backend: Kotlin + Gradle (see `backend/`)
-- Local persistence: frontend uses a small local-storage persistence plugin for the cart; the backend contains configuration in `src/main/resources`.
+- Local persistence: frontend uses a small local-storage persistence plugin for the user; the backend contains configuration in `src/main/resources`.
 
 ## Key features
 
@@ -47,7 +47,7 @@ This repository contains a small full-stack example that demonstrates product li
 3. Notes
 
 	- Backend and frontend communicate over HTTP; adjust `application.properties` or the frontend API base URL in `frontend/src/services` if you run servers on non-default ports.
-	- The frontend contains a persistence plugin `frontend/src/plugins/persistToLocalStorage.ts` used to keep cart state locally.
+	- The frontend contains a persistence plugin `frontend/src/plugins/persistToLocalStorage.ts` used to keep user state locally.
 
 ## Build for production
 
