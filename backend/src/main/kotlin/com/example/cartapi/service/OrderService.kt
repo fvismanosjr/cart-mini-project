@@ -49,7 +49,7 @@ class OrderService(
                     )
                 )
 
-                total += item.price
+                total += item.price.multiply(BigDecimal(item.quantity))
             } ?: println("product is out of stock or missing")
         }
 
