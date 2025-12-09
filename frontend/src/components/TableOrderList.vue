@@ -22,19 +22,17 @@ import { Button } from '@/components/ui/button'
 import { ClipboardClock, Store, X } from 'lucide-vue-next'
 import { formatToDateTime, canBeCanceled } from '@/helpers/Number'
 import { ref } from 'vue'
-import { cancelOrder, findUser } from '@/services/user'
-import { useUserStore } from '@/stores/user'
+import { cancelOrder, showAllOrders } from '@/services/user'
 import type { OrderResponseType } from '@/lib/types'
 
-const user = useUserStore();
 const orders = ref<OrderResponseType[]>([]);
 
 const emit = defineEmits<{
     (e: "update:list", value: boolean): void,
 }>();
 
-findUser(user.user.id).then((response) => {
-    orders.value = response.orders;
+showAllOrders().then((response) => {
+    orders.value = response.content;
 })
 
 const cancelOrderEvent = (orderId: number) => {

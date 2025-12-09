@@ -8,6 +8,8 @@ import com.example.cartapi.entity.OrderItem
 import com.example.cartapi.repository.CartRepository
 import com.example.cartapi.repository.OrderRepository
 import com.example.cartapi.repository.ProductRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -18,6 +20,15 @@ class OrderService(
     private val cartRepository: CartRepository,
     private val productRepository: ProductRepository,
 ) {
+    fun findAllByUserId(
+        userId: Long,
+        pageable: Pageable?
+    ): Page<OrderResponse> {
+        return orderRepository
+                .findAllByUserId(userId, pageable ?: Pageable.unpaged())
+                .map { it.toResponse() }
+    }
+
     fun save(
         userId: Long,
         request: OrderRequest

@@ -49,6 +49,17 @@ export const removeFromBag = async (cartItemId: number) => {
     });
 }
 
+export const showAllOrders = async () => {
+    const user = useUserStore();
+
+    return await fetch(`${USER_API_URL}/${user.user.id}/orders`, {
+        method: "GET",
+        credentials: "include"
+    }).then(async (response) => {
+        return await response.json();
+    })
+}
+
 export const saveOrder = async (item: object) => {
     const user = useUserStore();
 
